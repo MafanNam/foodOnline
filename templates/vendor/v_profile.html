@@ -32,9 +32,15 @@
                                                                     <li class="gal-img">
                                                                         <div class="drag-list">
                                                                             <div class="item-thumb">
-                                                                                <img class="thumbnail"
-                                                                                     src="{{ profile.profile_picture.url }}"
-                                                                                     alt="Profile Picture">
+                                                                                {% if profile.profile_picture %}
+                                                                                    <img class="thumbnail"
+                                                                                         src="{{ profile.profile_picture.url }}"
+                                                                                         alt="Profile Picture">
+                                                                                {% else %}
+                                                                                    <img class="thumbnail"
+                                                                                         src="{% static 'images/default-profile.PNG' %}"
+                                                                                         alt="Profile Picture">
+                                                                                {% endif %}
                                                                             </div>
                                                                         </div>
                                                                     </li>
@@ -56,9 +62,15 @@
                                                                     <li class="gal-img">
                                                                         <div class="drag-list">
                                                                             <div class="item-thumb">
-                                                                                <img class="thumbnail"
-                                                                                     src="{{ profile.cover_photo.url }}"
-                                                                                     alt="Cover Photo">
+                                                                                {% if profile.cover_photo %}
+                                                                                    <img class="thumbnail"
+                                                                                         src="{{ profile.cover_photo.url }}"
+                                                                                         alt="Cover Photo">
+                                                                                {% else %}
+                                                                                    <img class="thumbnail"
+                                                                                         src="{% static 'images/default-cover.PNG' %}"
+                                                                                         alt="Profile Picture">
+                                                                                {% endif %}
                                                                             </div>
                                                                         </div>
                                                                     </li>
@@ -80,9 +92,15 @@
                                                                     <li class="gal-img">
                                                                         <div class="drag-list">
                                                                             <div class="item-thumb">
-                                                                                <img class="thumbnail"
-                                                                                     src="{{ vendor.vendor_license.url }}"
-                                                                                     alt="Vendor License">
+                                                                                {% if vendor.vendor_license %}
+                                                                                    <img class="thumbnail"
+                                                                                         src="{{ vendor.vendor_license.url }}"
+                                                                                         alt="Vendor License">
+                                                                                {% else %}
+                                                                                    <img class="thumbnail"
+                                                                                         src="{% static 'images/default_licensejpg.jpg' %}"
+                                                                                         alt="Vendor License">
+                                                                                {% endif %}
                                                                             </div>
                                                                         </div>
                                                                     </li>
@@ -107,7 +125,8 @@
                                                         <div class="field-holder">
                                                             <label>Address *</label>
                                                             {{ profile_form.address }}
-                                                            <small class="text-muted float-right">powered by Google</small>
+                                                            <small class="text-muted float-right">powered by
+                                                                Google</small>
                                                         </div>
                                                     </div>
 
