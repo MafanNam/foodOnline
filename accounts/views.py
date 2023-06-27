@@ -99,7 +99,7 @@ def registerVendor(request):
 
             vendor = v_form.save(commit=False)
             vendor.user = user
-            vendor_name = v_form.cleaned_data['vendor_name']+'-'+str(user.id)
+            vendor_name = v_form.cleaned_data['vendor_name'] + '-' + str(user.id)
             vendor.vendor_slug = slugify(vendor_name)
             user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
@@ -201,7 +201,7 @@ def forgot_password(request):
             user = User.objects.get(email__exact=email)
 
             # send reset password email
-            mail_subject ='Reset Your Password'
+            mail_subject = 'Reset Your Password'
             email_template = 'accounts/emails/reset_password_email.html'
             send_verification_email(request, user, mail_subject, email_template)
 
