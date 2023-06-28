@@ -50,8 +50,9 @@ class Vendor(models.Model):
                 context = {
                     'user': self.user,
                     'is_approved': self.is_approved,
+                    'to_email': self.user.email,
                 }
-                if self.is_approved == True:
+                if self.is_approved:
                     # Send notification email
                     mail_subject = 'Congratulations! Your restaurant has been approved.'
                     send_notification(mail_subject, mail_template, context)
