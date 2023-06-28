@@ -200,6 +200,7 @@ def checkout(request):
     cart_count = cart_items.count()
     if cart_count <= 0:
         return redirect('marketplace')
+
     user_profile = UserProfile.objects.get(user=request.user)
     default_values = {
         'first_name': request.user.first_name,
