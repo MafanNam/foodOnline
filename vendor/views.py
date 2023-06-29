@@ -6,10 +6,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import slugify
 
 from accounts.forms import UserProfileForm
-from accounts.models import UserProfile
+from accounts.models import UserProfile, User
 from accounts.views import check_role_vendor
 from menu.models import Category, FoodItem
 from menu.forms import CategoryForm, FoodItemForm
+from orders.models import Order, OrderedFood
 from .forms import VendorForm, OpeningHourForm
 from .models import Vendor, OpeningHour
 
@@ -219,6 +220,7 @@ def opening_hours(request):
     return render(request, 'vendor/opening_hours.html', context)
 
 
+@login_required(login_url='login')
 def add_opening_hours(request):
     # handle the data and save ORM
     if request.user.is_authenticated:
@@ -245,6 +247,7 @@ def add_opening_hours(request):
                 return JsonResponse(response)
 
 
+@login_required(login_url='login')
 def remove_opening_hours(request, pk=None):
     if request.user.is_authenticated:
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -253,3 +256,43 @@ def remove_opening_hours(request, pk=None):
             return JsonResponse({'status': 'success', 'id': pk})
 
     return
+
+
+@login_required(login_url='login')
+def v_change_password(request):
+    if request.method == 'POST':
+        password = request.POST['password']
+        new_password = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
+
+        user = User.objects.get(id=request.user.pk)
+
+        if user.check_password(password):
+            if new_password == confirm_password and len(new_password) >= 8 and len(confirm_password) >= 8:
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password changed')
+                return redirect('login')
+            else:
+                messages.error(request, 'New Password do not match!')
+                return redirect('v_change_password')
+        else:
+            messages.error(request, 'Old Password do not match!')
+            return redirect('v_change_password')
+
+    return render(request, 'vendor/v_change_password.html')
+
+
+@login_required(login_url='login')
+def order_detail(request, order_number=None):
+    try:
+        order = Order.objects.get(order_number=order_number, is_ordered=True)
+        ordered_food = OrderedFood.objects.filter(order=order, food_item__vendor=get_vendor(request))
+
+        context = {
+            'order': order,
+            'ordered_food': ordered_food,
+        }
+        return render(request, 'vendor/order_detail.html', context)
+    except:
+        return redirect('vendor')

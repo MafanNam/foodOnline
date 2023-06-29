@@ -16,7 +16,7 @@ class OrderedFoodInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'payment', 'order_number', 'total', 'payment_method', 'status', 'is_ordered')
+    list_display = ('user', 'payment', 'order_number', 'total', 'payment_method', 'status', 'order_placed_to', 'is_ordered')
     inlines = [OrderedFoodInline]
 
 
