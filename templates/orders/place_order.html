@@ -105,8 +105,15 @@
                                                     </span>
                                                 </li>
 
-                                                <!-- PayPal Checkout Button -->
-                                                <div id="paypal-button-container"></div>
+
+                                                {% if order.payment_method == 'PayPal' %}
+                                                    <!-- PayPal Checkout Button -->
+                                                    <div id="paypal-button-container"></div>
+                                                {% elif order.payment_method == 'MonoBank' %}
+                                                    <button class="btn btn-danger w-100">Pay with MonoBank</button>
+                                                {% elif order.payment_method == 'PrivatBank' %}
+                                                    <button class="btn btn-danger w-100">Pay with PrivatBank</button>
+                                                {% endif %}
 
                                             </ul>
                                         </div>
@@ -192,7 +199,7 @@
                     'csrfmiddlewaretoken': csrftoken,
                 },
                 success: function (response) {
-                    window.location.href = order_complete +"?order_no="+response.order_number+"&trans_id="+response.transaction_id
+                    window.location.href = order_complete + "?order_no=" + response.order_number + "&trans_id=" + response.transaction_id
                 }
             })
         }
