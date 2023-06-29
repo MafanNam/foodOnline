@@ -1,9 +1,12 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from accounts.forms import UserProfileForm, UserInfoForm
 from accounts.models import UserProfile, User
+from orders.models import Order, OrderedFood
 
 
 @login_required(login_url='login')
@@ -56,3 +59,37 @@ def change_password(request):
             return redirect('change_password')
 
     return render(request, 'customers/change_password.html')
+
+
+@login_required(login_url='login')
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
+
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'customers/my_orders.html', context)
+
+
+@login_required(login_url='login')
+def order_detail(request, order_number=None):
+    try:
+        order = Order.objects.get(user=request.user, is_ordered=True, order_number=order_number)
+        ordered_food = OrderedFood.objects.filter(order=order)
+
+        subtotal = 0
+        for item in ordered_food:
+            subtotal += (item.price * item.quantity)
+
+        tax_data = json.loads(order.tax_data)
+
+        context = {
+            'order': order,
+            'ordered_food': ordered_food,
+            'subtotal': subtotal,
+            'tax_data': tax_data
+        }
+        return render(request, 'customers/order_detail.html', context)
+
+    except:
+        return redirect('custDashboard')
