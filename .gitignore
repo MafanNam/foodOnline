@@ -21,8 +21,6 @@ media
 *.py[cod]
 *$py.class
 
-GDAL-3.4.3-cp311-cp311-win_amd64.whl
-
 # C extensions
 *.so
 
